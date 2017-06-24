@@ -39,6 +39,10 @@ public class Subject {
     @Column(name = "ACTIVE1")
     private boolean active;
 
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 
     public int getId() {
         return id;

@@ -3,6 +3,7 @@ package com.chdtu.fitis.dipladd.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -28,8 +29,15 @@ public class Student {
     @ManyToOne(targetEntity = Group.class)
     @JoinColumn(name = "GROUP_ID")
     private Group group;
-    @Embedded
 
+    @OneToMany(targetEntity = Grade.class)
+    @JoinColumn(name = "STUD_ID")
+    private Set<Grade> grades;
+
+    @Override
+    public String toString() {
+        return getInitials();
+    }
 
     public int getId() {
         return id;
@@ -81,6 +89,14 @@ public class Student {
 
     public String getStudentFullName(){
         return surname+" "+name+" "+patronimic;
+    }
+
+    public Set<Grade> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(Set<Grade> grades) {
+        this.grades = grades;
     }
 
     public String getInitials(){

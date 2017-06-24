@@ -23,9 +23,9 @@ public class Query {
 
     public final int FIRST_SEMESTER = 1;
 
-    public String buildGetGradesQuery(int studentId, int lastSemester, List<Integer> knowledgeControl) {
+    public String buildGetGradesQuery(int studentId, int lastSemester, List<Object> knowledgeControl) {
 
-        String setOfKnowledgeControlKinds = makeStringIndexFromIntegerList(knowledgeControl);
+        String setOfKnowledgeControlKinds = listToStringIndex(knowledgeControl);
         String resultQuery =
                 "Select g From Grade g " +
                         "Join Subject subj On g.subjectId=subj.id " +
@@ -44,22 +44,22 @@ public class Query {
         return resultQuery;
     }
 
-    public String makeStringIndexFromIntegerList(List<Integer> list) {
-        String index = "(";
-        for (int type : list) {
-            index += type + ",";
+    public static String listToStringIndex(List<Object> list) {
+        String result = "(";
+        for (Object item : list) {
+            result += item.toString() + ",";
         }
         if (list.size() > 0) {
-            index = index.substring(0, index.length() - 1);
+            result = result.substring(0, result.length() - 1);
         }
-        index += ")";
-        return index;
+        result += ")";
+        return result;
     }
 
     public List<List<Grade>> getGrades(Student student) {
         int lastSemester = student.getGroup().calculateLastSemester();
 
-        List<Integer> knowledgeControlsTypes = new ArrayList<Integer>();
+        List<Object> knowledgeControlsTypes = new ArrayList<>();
         List<List<Grade>> grades = new ArrayList<>();
         knowledgeControlsTypes.add(KnowledgeControl.EXAM);
         knowledgeControlsTypes.add(KnowledgeControl.TEST);
@@ -99,18 +99,9 @@ public class Query {
                         "Join Department dep on dep.id=sp.departmentId " +
                         "Join CurrentYear cr on cr.currentYear>0 " +
                         "Where gr.active=true " +
-                        "and not gr.name='��-122' " +
+                        "and not gr.name='??-122' " +
                         "and gr.creationYear=cr.currentYear-3 " +
                         "and dep.id =" + selectedDepartmentId
-        ).getResultList();
-    }
-
-    public List<Student> getSelectedStudents(int selectedGroupId) {
-        return entityManager.createQuery(
-                "FROM Student stud " +
-                        "Where stud.inActive=true " +
-                        "and stud.group.id=" + selectedGroupId + " " +
-                        "order by stud.surname"
         ).getResultList();
     }
 }

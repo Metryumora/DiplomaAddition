@@ -7,14 +7,14 @@ import java.io.Serializable;
 @Entity
 @IdClass(GradePrimaryKey.class)
 @Table(name = "GRADES")
-public class Grade implements Serializable{
+public class Grade implements Serializable {
 
     @Id
-    @Column(name = "STUD_ID",insertable = false, updatable = false)
+    @Column(name = "STUD_ID", insertable = false, updatable = false)
     private int studentId;
 
     @Id
-    @Column(name = "SUBJ_ID",insertable = false, updatable = false)
+    @Column(name = "SUBJ_ID", insertable = false, updatable = false)
     private int subjectId;
 
     @Column(name = "GRADE")
@@ -34,6 +34,10 @@ public class Grade implements Serializable{
     @JoinColumn(name = "SUBJ_ID")
     private Subject subject;
 
+    @Override
+    public String toString() {
+        return String.format("%s %2d", subject.getName(), getPoints());
+    }
 
     public int getStudentId() {
         return studentId;

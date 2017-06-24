@@ -53,13 +53,18 @@ public class Group {
 
     public int calculateLastSemester() {
         int lastSemester = 0;
-        if (modeOfStudy == 'ไ') {
+        if (modeOfStudy == 'ะด') {
             lastSemester = SEMESTERS_FOR_FULL_TIME_GROUP;
         }
-        if (modeOfStudy == '็') {
+        if (modeOfStudy == 'ะท') {
             lastSemester = SEMESTERS_FOR_EXTRAMURAL_GROUP;
         }
         return lastSemester;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     public int getId() {
