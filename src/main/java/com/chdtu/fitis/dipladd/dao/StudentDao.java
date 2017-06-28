@@ -15,4 +15,6 @@ public interface StudentDao extends JpaRepository<Student, Integer> {
 
     public List<Student> getByGroupAndInActiveOrderBySurnameAsc(Integer groupId, Boolean isActive);
 
+    public Student getBySurnameAndNameAndPatronimic(String surname, String name, String patronimic);
+
 }

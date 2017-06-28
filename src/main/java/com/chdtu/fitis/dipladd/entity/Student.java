@@ -3,6 +3,7 @@ package com.chdtu.fitis.dipladd.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -22,8 +23,20 @@ public class Student {
     @Column(name = "PATRONIMIC")
     private String patronimic;
 
-    @Column (name = "ACTIVE1")
-    @Type(type="true_false")
+    @Column(name = "SURNAME_ENG")
+    private String surnameEnglish;
+
+    @Column(name = "NAME_ENG")
+    private String nameEnglish;
+
+    @Column(name = "PATRONIMIC_ENG")
+    private String patronimicEnglish;
+
+    @Column(name = "BIRTH_DATE")
+    private Date birthDate;
+
+    @Column(name = "ACTIVE1")
+    @Type(type = "true_false")
     private boolean inActive;
 
     @ManyToOne(targetEntity = Group.class)
@@ -33,6 +46,9 @@ public class Student {
     @OneToMany(targetEntity = Grade.class)
     @JoinColumn(name = "STUD_ID")
     private Set<Grade> grades;
+
+    @Column(name = "BACHALOR_DIPLOMA_WORK")
+    private String bachelorWorkTheme;
 
     @Override
     public String toString() {
@@ -87,8 +103,8 @@ public class Student {
         this.inActive = inActive;
     }
 
-    public String getStudentFullName(){
-        return surname+" "+name+" "+patronimic;
+    public String getStudentFullName() {
+        return surname + " " + name + " " + patronimic;
     }
 
     public Set<Grade> getGrades() {
@@ -99,10 +115,48 @@ public class Student {
         this.grades = grades;
     }
 
-    public String getInitials(){
-        return surname+" "+name.substring(0,1)+"."+patronimic.substring(0,1)+".";
+    public String getInitials() {
+        return surname + " " + name.substring(0, 1) + "." + patronimic.substring(0, 1) + ".";
     }
 
+    public Date getBirthDate() {
+        return birthDate;
+    }
 
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getSurnameEnglish() {
+        return surnameEnglish;
+    }
+
+    public void setSurnameEnglish(String surnameEnglish) {
+        this.surnameEnglish = surnameEnglish;
+    }
+
+    public String getNameEnglish() {
+        return nameEnglish;
+    }
+
+    public void setNameEnglish(String nameEnglish) {
+        this.nameEnglish = nameEnglish;
+    }
+
+    public String getPatronimicEnglish() {
+        return patronimicEnglish;
+    }
+
+    public void setPatronimicEnglish(String patronimicEnglish) {
+        this.patronimicEnglish = patronimicEnglish;
+    }
+
+    public String getBachelorWorkTheme() {
+        return bachelorWorkTheme;
+    }
+
+    public void setBachelorWorkTheme(String bachelorWorkTheme) {
+        this.bachelorWorkTheme = bachelorWorkTheme;
+    }
 }
 

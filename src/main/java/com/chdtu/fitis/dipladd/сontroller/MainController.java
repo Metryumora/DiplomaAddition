@@ -1,11 +1,10 @@
 package com.chdtu.fitis.dipladd.сontroller;
 
-import com.chdtu.fitis.dipladd.Query;
 import com.chdtu.fitis.dipladd.docmanager.Util;
-import com.chdtu.fitis.dipladd.entity.Department;
 import com.chdtu.fitis.dipladd.entity.Grade;
 import com.chdtu.fitis.dipladd.entity.Student;
 import com.chdtu.fitis.dipladd.entity.Subject;
+import com.chdtu.fitis.dipladd.grades.StudentSummary;
 import com.chdtu.fitis.dipladd.service.DepartmentService;
 import com.chdtu.fitis.dipladd.service.GradeService;
 import com.chdtu.fitis.dipladd.service.StudentService;
@@ -18,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by Metr_yumora on 12.06.2017.
@@ -50,28 +47,15 @@ public class MainController {
         //departmentService.findByAccountable(true).forEach((Grade g)->g.getGradeECTS());
         //System.out.println(studentService.get(42));
 
-        Student student = (studentService.get(4117));
+        Student student = (studentService.get(5091));
         List<Subject> subjects = subjectService.getByStudent(student);
         List<List<Grade>> grades = gradeService.getGradesByStudent(student, subjects);
-
-
-//        Query query = new Query();
-//        query.getActiveDepartments().forEach((Department d)-> System.out.println(d.getName()));
-
-        return new ModelAndView("index", modelMap);
-    }
-
-    @RequestMapping(value = "/doc", method = {RequestMethod.GET})
-    public ModelAndView testDoc(ModelMap modelMap) {
-
-        Map<String,String> placeholdersValues = new HashMap<>();
-        placeholdersValues.put("PHGroup","ПЗ-144");
-        placeholdersValues.put("PHName","Тулуб В.О.");
-        placeholdersValues.put("PHWorkNumber","1");
-        placeholdersValues.put("PHYear","2017");
-        placeholdersValues.put("PHSubject","Програмування обчислень");
-
-        Util.replaceInPattern("Pattern.docx", placeholdersValues);
+        StudentSummary studentSummary = new StudentSummary(student, grades);
+        Util.fillDiplomaSupplementPattern(
+                "DiplomaSupplementTemplate.docx",
+                studentSummary,
+                student.getInitials()+" "+student.getGroup().getName()+".docx"
+        );
 
         return new ModelAndView("index", modelMap);
     }

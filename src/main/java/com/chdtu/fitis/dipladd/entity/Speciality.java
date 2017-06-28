@@ -5,35 +5,28 @@ import java.util.Set;
 
 
 @Entity
-@Table(name="SPECIALITIES")
+@Table(name = "SPECIALITIES")
 public class Speciality {
     @Id
-    @Column(name= "ID")
+    @Column(name = "ID")
     private int id;
 
-    @Column(name="NAME")
+    @Column(name = "NAME")
     private String name;
 
-    //FAKULTET ID
-    //KAFEDRA ID=PIDROZDILI ID
-    @Column(name="NAME_BACH")
+    @Column(name = "NAME_BACH")
     private String bachelorName;
 
     @ManyToOne
-    @JoinColumn(name="KAFEDRA_ID")
+    @JoinColumn(name = "KAFEDRA_ID")
     private Cathedra cathedra;
-
 
     @OneToMany(mappedBy = "speciality")
     private Set<Subject> subjects;
 
     @ManyToOne
-    @JoinColumn (name = "FAKULTET_ID")
+    @JoinColumn(name = "FAKULTET_ID")
     private Department department;
-
-    @Column(name = "FAKULTET_ID",insertable = false, updatable = false)
-    private int departmentId;
-
 
     public int getId() {
         return id;
@@ -81,13 +74,5 @@ public class Speciality {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
     }
 }

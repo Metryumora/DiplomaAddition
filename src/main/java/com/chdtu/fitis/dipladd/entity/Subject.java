@@ -14,6 +14,9 @@ public class Subject {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name = "NAME_ENG")
+    private String nameEnglish;
+
     @ManyToOne
     @JoinColumn(name = "SPECIALITY_ID")
     private Speciality speciality;
@@ -25,13 +28,11 @@ public class Subject {
     @Column(name = "KC_ID",insertable = false, updatable = false)
     private int knowledgeControlID;
 
-    @OneToMany(mappedBy="subject",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="subject",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<GroupSubject> groupSubjects;
 
     @Column(name = "SEMESTER")
     private int semester;
-
-
 
     @Column(name = "GODIN")
     private int hours;
@@ -115,5 +116,13 @@ public class Subject {
 
     public void setKnowledgeControlID(int knowledgeControlID) {
         this.knowledgeControlID = knowledgeControlID;
+    }
+
+    public String getNameEnglish() {
+        return nameEnglish;
+    }
+
+    public void setNameEnglish(String nameEnglish) {
+        this.nameEnglish = nameEnglish;
     }
 }

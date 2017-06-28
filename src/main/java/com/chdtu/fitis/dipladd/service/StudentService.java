@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -30,6 +28,11 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Student get(Integer id) {
         return studentDao.findOne(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Student getByName(String surname, String name, String patronimic) {
+        return studentDao.getBySurnameAndNameAndPatronimic(surname, name, patronimic);
     }
 
     @Transactional(readOnly = true)

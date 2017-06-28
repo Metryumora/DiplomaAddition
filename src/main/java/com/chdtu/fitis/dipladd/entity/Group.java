@@ -7,44 +7,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table (name = "GROUPS")
+@Table(name = "GROUPS")
 public class Group {
 
     @Id
-    @Column (name = "ID")
+    @Column(name = "ID")
     private int id;
 
-    @Column (name = "NAME")
+    @Column(name = "NAME")
     private String name;
     @ManyToOne
-    @JoinColumn (name = "SPECIALITY_ID")
+    @JoinColumn(name = "SPECIALITY_ID")
     private Speciality speciality;
 
-    @Column (name="SPECIALITY_ID",insertable = false, updatable = false)
+    @Column(name = "SPECIALITY_ID", insertable = false, updatable = false)
     private int specialityId;
 
-    @Column (name = "TUTION_FORM")
+    @Column(name = "TUTION_FORM")
     private char modeOfStudy;
 
-    @Column (name = "CREATION_YEAR")
+    @Column(name = "CREATION_YEAR")
     private int creationYear;
 
-    @Column (name = "KURS")
+    @Column(name = "KURS")
     private int studyStartYear;
 
-    @Column (name = "ACTIVE1")
-    @Type(type="true_false")
+    @Column(name = "ACTIVE1")
+    @Type(type = "true_false")
     private boolean active;
 
-    @OneToMany(mappedBy ="group")
+    @OneToMany(mappedBy = "group")
     private Set<Student> students;
 
-    @OneToMany(mappedBy="group",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<GroupSubject> groupSubjects = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "SUBJECTS_FOR_GROUPS", joinColumns = {
-            @JoinColumn(name = "GROUP_ID", nullable = false, updatable = false) },
+            @JoinColumn(name = "GROUP_ID", nullable = false, updatable = false)},
             inverseJoinColumns = @JoinColumn(name = "SUBJECT_ID"))
     private Set<Subject> subjects = new HashSet<>(0);
 
@@ -53,13 +53,21 @@ public class Group {
 
     public int calculateLastSemester() {
         int lastSemester = 0;
-        if (modeOfStudy == 'д') {
+        if (modeOfStudy == 1076) {
             lastSemester = SEMESTERS_FOR_FULL_TIME_GROUP;
         }
-        if (modeOfStudy == 'з') {
+        if (modeOfStudy == 1079) {
             lastSemester = SEMESTERS_FOR_EXTRAMURAL_GROUP;
         }
         return lastSemester;
+    }
+
+    public String getStudyingPeriod() {
+        int lastSemester = calculateLastSemester();
+        return "01.09." +
+                String.format("%4d", creationYear) +
+                "-30.06." +
+                String.format("%4d", creationYear + lastSemester / 2);
     }
 
     @Override
