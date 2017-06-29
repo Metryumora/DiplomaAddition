@@ -107,10 +107,10 @@ public class StudentSummary {
         String modeOfStudyUkr = "";
         String modeOfStudyEng = "";
         char modeOfStudy = student.getGroup().getModeOfStudy();
-        if (modeOfStudy == 1076) {
+        if (modeOfStudy == 'д') {
             modeOfStudyUkr = "Денна";
             modeOfStudyEng = "Full-time";
-        } else if (modeOfStudy == 1079) {
+        } else if (modeOfStudy == 'з') {
             modeOfStudyUkr = "Заочна";
             modeOfStudyEng = "Extramural";
         }

@@ -158,5 +158,9 @@ public class Student {
     public void setBachelorWorkTheme(String bachelorWorkTheme) {
         this.bachelorWorkTheme = bachelorWorkTheme;
     }
+
+    public String generateDocumentName() {
+        return getInitials() + ".docx";
+    }
 }
 

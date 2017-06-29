@@ -1,6 +1,7 @@
 package com.chdtu.fitis.dipladd.service;
 
 import com.chdtu.fitis.dipladd.dao.StudentDao;
+import com.chdtu.fitis.dipladd.entity.Group;
 import com.chdtu.fitis.dipladd.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,7 +37,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Student> getByGroupAndInActiveOrderBySurnameAsc(Integer groupId, Boolean isActive) {
-        return studentDao.getByGroupAndInActiveOrderBySurnameAsc(groupId, isActive);
+    public List<Student> getByGroupAndInActiveOrderBySurnameAsc(Group group, Boolean isActive) {
+        return studentDao.getByGroupAndInActiveOrderBySurnameAsc(group, isActive);
     }
 }

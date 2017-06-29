@@ -48,12 +48,9 @@ public class GradeSummary {
             setPeriodsToNormalView();
 
         }
-        courseGrades.sort(new Comparator<CourseGrade>() {
-            @Override
-            public int compare(CourseGrade o1, CourseGrade o2) {
-                Collator ukrainianCollator = Collator.getInstance(new Locale("uk", "UA"));
-                return ukrainianCollator.compare(o1.getSubjectName(), o2.getSubjectName());
-            }
+        courseGrades.sort((o1, o2) -> {
+            Collator ukrainianCollator = Collator.getInstance(new Locale("uk", "UA"));
+            return ukrainianCollator.compare(o1.getSubjectName(), o2.getSubjectName());
         });
     }
 

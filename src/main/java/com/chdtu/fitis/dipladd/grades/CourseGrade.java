@@ -16,10 +16,10 @@ public class CourseGrade {
     private double creditsECTS;
     private int semester;
     private boolean multipleSemester;
-    private Integer gradeScale;//РћС†С–РЅРєР° РІС–Рґ 1 РґРѕ 5
-    private double points;//РћС†С–РЅРєР° РІС–Рґ 0 РґРѕ 100
-    private String gradeNationalScale;//РћС†С–РЅРєР° РІС–Рґ РЅРµР·Р°РґРѕРІС–Р»СЊРЅРѕ РґРѕ РІС–РґРјС–РЅРЅРѕ
-    private String gradeECTS;//РћС†С–РЅРєР° РІС–Рґ F РґРѕ Рђ
+    private Integer gradeScale;//Оцінка від 1 до 5
+    private double points;//Оцінка від 0 до 100
+    private String gradeNationalScale;//Оцінка від незадовільно до відмінно
+    private String gradeECTS;//Оцінка від F до А
     private boolean markType;
     private int hours;
     private String knowledgeControlName;
@@ -88,21 +88,21 @@ public class CourseGrade {
         if (markType) {
             switch (gradeECTS) {
                 case "A":
-                    return "Р’С–РґРјС–РЅРЅРѕ";
+                    return "Відмінно";
                 case "B":
-                    return "Р”РѕР±СЂРµ";
+                    return "Добре";
                 case "C":
-                    return "Р”РѕР±СЂРµ";
+                    return "Добре";
                 case "D":
-                    return "Р—Р°РґРѕРІС–Р»СЊРЅРѕ";
+                    return "Задовільно";
                 case "E":
-                    return "Р—Р°РґРѕРІС–Р»СЊРЅРѕ";
+                    return "Задовільно";
                 case "F":
-                    return "РќРµР·Р°РґРѕРІС–Р»СЊРЅРѕ";
+                    return "Незадовільно";
                 default:
                     return "-";
             }
-        } else return "Р—Р°СЂР°С…РѕРІР°РЅРѕ";
+        } else return "Зараховано";
     }
 
     public String getNationalGradeScaleEnglish() {
@@ -147,7 +147,8 @@ public class CourseGrade {
             result.put("#EngNatGrade", getNationalGradeScaleEnglish());
             result.put("#ECTS", getGradeECTS());
         } catch (NullPointerException e) {
-            System.out.println("Some of the grade's properties are null! " + this.getSubjectName());
+            //Debug
+            //System.out.println("Some of the grade's properties are null! " + this.getSubjectName());
         }
         return result;
     }
@@ -177,13 +178,13 @@ public class CourseGrade {
     public String getMarkTypeInUkrainian() {
         if (markType) {
             return "";
-        } else return "(Р—Р°Р».)";
+        } else return "(Зал.)";
 
     }
 
     public String getMultipleSemesterInUkrainian() {
         if (multipleSemester) {
-            return "(Р‘РЎ)";
+            return "(БС)";
         } else return "";
     }
 

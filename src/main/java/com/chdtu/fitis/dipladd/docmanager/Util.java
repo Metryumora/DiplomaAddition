@@ -25,7 +25,7 @@ public class Util {
 
     private static final String PLACEHOLDER_PREFIX = "#";
 
-    private static WordprocessingMLPackage getTemplate(String name) throws Docx4JException, FileNotFoundException {
+    public static WordprocessingMLPackage getTemplate(String name) throws Docx4JException, FileNotFoundException {
         return WordprocessingMLPackage.load(new FileInputStream(new File(name)));
     }
 
@@ -68,8 +68,20 @@ public class Util {
                         textElement.setValue(value);
                     }
                 } catch (NullPointerException e) {
-                    System.out.println(textElement.getValue() + " is null");
+                    //Debug
+                    //System.out.println(textElement.getValue() + " is null");
                 }
+            }
+        }
+    }
+
+    private static void replacePlaceholdersWithBlank(WordprocessingMLPackage template, Set<String> placeholders) {
+        List<Object> texts = getAllElementFromObject(template.getMainDocumentPart(), Text.class);
+        for (Object text : texts) {
+            Text textElement = (Text) text;
+            if (textElement.getValue().startsWith(PLACEHOLDER_PREFIX)
+                    && placeholders.contains(textElement.getValue())) {
+                textElement.setValue("");
             }
         }
     }
@@ -113,9 +125,9 @@ public class Util {
         }
     }
 
-    public static void fillDiplomaSupplementPattern(String patternFilepath, StudentSummary summary, String resultFilepath) {
+    public static void fillDiplomaSupplementTemplate(String templateFilepath, StudentSummary summary, String resultFilepath) {
         try {
-            WordprocessingMLPackage template = getTemplate(patternFilepath);
+            WordprocessingMLPackage template = Util.getTemplate(templateFilepath);
             Map<String, Object> placeholdersValues = summary.getPlaceholderDictionary();
             replacePlaceholders(template, placeholdersValues);
 
@@ -144,8 +156,11 @@ public class Util {
     private static void fillTableWithGrades(WordprocessingMLPackage template,
                                             List<List<Map<String, String>>> tableDataDictionary)
             throws Docx4JException, JAXBException {
+        Set<String> placeholdersToRemove = new HashSet<>();
+
         List<Object> tables = getAllElementFromObject(template.getMainDocumentPart(), Tbl.class);
         Tbl tempTable = getTemplateTable(tables, "#GradesTable");
+        placeholdersToRemove.add("#GradesTable");
         List<Object> rows = getAllElementFromObject(tempTable, Tr.class);
 
         //Doing reverse to avoid saving file after filling each section
@@ -157,7 +172,9 @@ public class Util {
 
         for (List<Map<String, String>> tableSectionDataDictionary : tableDataDictionary) {
             if (sectionNumber > 0) {
-                rowToAddIndex = rows.indexOf(findRowInTable(tempTable, "#Section" + sectionNumber)) + 1;
+                String sectionPlaceholderKey = "#Section" + sectionNumber;
+                placeholdersToRemove.add(sectionPlaceholderKey);
+                rowToAddIndex = rows.indexOf(findRowInTable(tempTable, sectionPlaceholderKey)) + 1;
             } else {
                 rowToAddIndex = 2;
             }
@@ -168,6 +185,7 @@ public class Util {
             sectionNumber--;
         }
         tempTable.getContent().remove(templateRow);
+        replacePlaceholdersWithBlank(template, placeholdersToRemove);
     }
 
 
