@@ -18,8 +18,12 @@ import java.util.List;
 @Repository
 public class StudentService {
 
-    @Autowired
     private StudentDao studentDao;
+
+    @Autowired
+    public void setStudentDao(StudentDao studentDao) {
+        this.studentDao = studentDao;
+    }
 
     @Transactional(readOnly = true)
     public List<Student> findAll() {
@@ -39,5 +43,10 @@ public class StudentService {
     @Transactional(readOnly = true)
     public List<Student> getByGroupAndInActiveOrderBySurnameAsc(Group group, Boolean isActive) {
         return studentDao.getByGroupAndInActiveOrderBySurnameAsc(group, isActive);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Student> getByGroupIdAndInActiveOrderBySurnameAsc(Integer id, Boolean isActive) {
+        return studentDao.getByGroupIdAndInActiveOrderBySurnameAsc(id, isActive);
     }
 }

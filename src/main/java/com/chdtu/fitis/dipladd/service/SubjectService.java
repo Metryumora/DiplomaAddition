@@ -22,8 +22,12 @@ public class SubjectService {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Autowired
     private SubjectDao subjectDao;
+
+    @Autowired
+    public void setSubjectDao(SubjectDao subjectDao) {
+        this.subjectDao = subjectDao;
+    }
 
     // TODO: 24.06.2017 Check result
     public List<Subject> getByStudent(Student student) {

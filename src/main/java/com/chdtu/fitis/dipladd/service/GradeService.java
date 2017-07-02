@@ -24,11 +24,14 @@ public class GradeService {
 
     public static final int FIRST_SEMESTER = 1;
 
-    @Autowired
     private GradeDao gradeDao;
-
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    public void setGradeDao(GradeDao gradeDao) {
+        this.gradeDao = gradeDao;
+    }
 
     public List<Grade> findAll() {
         return gradeDao.findAll();

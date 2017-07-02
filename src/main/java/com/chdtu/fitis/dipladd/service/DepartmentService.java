@@ -16,8 +16,12 @@ import java.util.List;
 @Repository
 public class DepartmentService {
 
-    @Autowired
     private DepartmentDao departmentDao;
+
+    @Autowired
+    public void setDepartmentDao(DepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
+    }
 
     @Transactional(readOnly = true)
     public List<Department> findByAccountable(Boolean accountable) {

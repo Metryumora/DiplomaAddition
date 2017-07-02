@@ -160,7 +160,10 @@ public class Student {
     }
 
     public String generateDocumentName() {
-        return getInitials() + ".docx";
+        return getInitials()
+                .replace('.', ' ')
+                .trim()
+                + ".docx";
     }
 }
 

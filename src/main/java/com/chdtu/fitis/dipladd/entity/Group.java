@@ -10,53 +10,43 @@ import java.util.Set;
 @Table(name = "GROUPS")
 public class Group {
 
+    public static final int SEMESTERS_FOR_FULL_TIME_GROUP = 8;
+    public static final int SEMESTERS_FOR_EXTRAMURAL_GROUP = 10;
     @Id
     @Column(name = "ID")
     private int id;
-
     @Column(name = "NAME")
     private String name;
     @ManyToOne
     @JoinColumn(name = "SPECIALITY_ID")
     private Speciality speciality;
-
     @Column(name = "SPECIALITY_ID", insertable = false, updatable = false)
     private int specialityId;
-
     @Column(name = "TUTION_FORM")
     private char modeOfStudy;
-
     @Column(name = "CREATION_YEAR")
     private int creationYear;
-
     @Column(name = "KURS")
     private int studyStartYear;
-
     @Column(name = "ACTIVE1")
     @Type(type = "true_false")
     private boolean active;
-
     @OneToMany(mappedBy = "group")
     private Set<Student> students;
-
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<GroupSubject> groupSubjects = new HashSet<>();
-
     @ManyToMany
     @JoinTable(name = "SUBJECTS_FOR_GROUPS", joinColumns = {
             @JoinColumn(name = "GROUP_ID", nullable = false, updatable = false)},
             inverseJoinColumns = @JoinColumn(name = "SUBJECT_ID"))
     private Set<Subject> subjects = new HashSet<>(0);
 
-    public static final int SEMESTERS_FOR_FULL_TIME_GROUP = 8;
-    public static final int SEMESTERS_FOR_EXTRAMURAL_GROUP = 10;
-
     public int calculateLastSemester() {
         int lastSemester = 0;
-        if (modeOfStudy == 1076) {
+        if (modeOfStudy == 'ä') {
             lastSemester = SEMESTERS_FOR_FULL_TIME_GROUP;
         }
-        if (modeOfStudy == 1079) {
+        if (modeOfStudy == 'ç') {
             lastSemester = SEMESTERS_FOR_EXTRAMURAL_GROUP;
         }
         return lastSemester;

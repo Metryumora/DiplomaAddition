@@ -6,9 +6,11 @@ import com.chdtu.fitis.dipladd.entity.Group;
 import com.chdtu.fitis.dipladd.entity.Student;
 import com.chdtu.fitis.dipladd.entity.Subject;
 import com.chdtu.fitis.dipladd.grades.StudentSummary;
-import com.chdtu.fitis.dipladd.service.*;
+import com.chdtu.fitis.dipladd.service.GradeService;
+import com.chdtu.fitis.dipladd.service.GroupService;
+import com.chdtu.fitis.dipladd.service.StudentService;
+import com.chdtu.fitis.dipladd.service.SubjectService;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -30,24 +32,35 @@ import java.util.List;
 @EnableAutoConfiguration
 public class MainController {
 
-    @Autowired
+    private static final String ROOT_OUTPUT_DIRECTORY = "C:\\out";
+    private static final String templateFilepath = "DiplomaSupplementTemplate.docx";
+    private static String filepathPrefix = "";
     private StudentService studentService;
-    @Autowired
     private GradeService gradeService;
-    @Autowired
-    private DepartmentService departmentService;
-    @Autowired
     private SubjectService subjectService;
-    @Autowired
     private GroupService groupService;
 
-    private static final String ROOT_OUTPUT_DIRECTORY = "C:\\out";
-
-    private static String filepathPrefix = "";
-
-    private static final String templateFilepath = "DiplomaSupplementTemplate.docx";
-
     public MainController() throws FileNotFoundException, Docx4JException {
+    }
+
+    @Autowired
+    public void setStudentService(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    @Autowired
+    public void setGradeService(GradeService gradeService) {
+        this.gradeService = gradeService;
+    }
+
+    @Autowired
+    public void setSubjectService(SubjectService subjectService) {
+        this.subjectService = subjectService;
+    }
+
+    @Autowired
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
     }
 
     private void createRootOutputDirectory() {
@@ -64,17 +77,26 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/s", method = {RequestMethod.GET})
+    @RequestMapping(value = "/s", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView generateForStudent(ModelMap modelMap, @RequestParam("id") Integer id) {
         Student student = studentService.get(id);
         generateDiplomaAddition(student);
+        modelMap.addAttribute("message", "Додаток до диплома успішно збережено "
+                + filepathPrefix + student.generateDocumentName());
         return new ModelAndView("index", modelMap);
     }
 
-    @RequestMapping(value = "/g", method = {RequestMethod.GET})
+    @RequestMapping(value = "/g", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView generateForGroup(ModelMap modelMap, @RequestParam("id") Integer id) {
         Group group = groupService.get(id);
         generateDiplomaAdditions(group);
+        modelMap.addAttribute("message", "Додатки до диплома успішно збережено в "
+                + filepathPrefix);
+        return new ModelAndView("index", modelMap);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView showMainPage(ModelMap modelMap) {
         return new ModelAndView("index", modelMap);
     }
 
@@ -90,6 +112,7 @@ public class MainController {
         List<List<Grade>> grades = gradeService.getGradesByStudent(student, subjects);
         StudentSummary studentSummary = new StudentSummary(student, grades);
         Util.fillDiplomaSupplementTemplate(templateFilepath, studentSummary,
-                filepathPrefix + student.generateDocumentName());
+                filepathPrefix + student.generateDocumentName()
+        );
     }
 }
