@@ -47,7 +47,7 @@ public class GroupService {
                         "join sp.department dep " +
                         "where gr.active = true " +
                         "and dep.id= " + id + " " +
-                        "and gr.creationYear = " + (currentYear - 3),
+                        "and gr.creationYear = " + (currentYear - 4),
                 Group.class).getResultList();
     }
 
